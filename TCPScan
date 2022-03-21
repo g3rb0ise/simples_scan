@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [ $# -ne 1 ]
+  then
+    echo "Usage TCPScan.sh <IP/namespace>"
+    exit
+fi
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+ports=$(nmap -p- --min-rate=1000 -T4 $1 | grep -o '^[0-9]*' | tr '\n' ',' |  sed s/,$//)
+nmap -sCV -p$ports $1 --min-rate=1000

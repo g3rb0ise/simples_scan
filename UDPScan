@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ $# -ne 1 ]
+  then
+    echo "Usage TCPScan.sh <IP/namespace>"
+    exit 1
+fi
+
+ports=$(nmap -p- -sU --min-rate=1000 $1| grep -o '^[0-9]*' | tr '\n' ',' |  sed s/,$//)
+nmap -sCUV --min-rate=1000 -p$ports $1 
